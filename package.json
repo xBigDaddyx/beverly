@@ -1,0 +1,24 @@
+{
+    "type": "module",
+    "private": true,
+    "scripts": {
+        "dev:styles": "npx tailwindcss -i resources/css/beverly.css -o resources/dist/beverly.css --postcss --watch",
+        "build:styles": "npx tailwindcss -i resources/css/beverly.css -o resources/dist/beverly.css --postcss --minify && npm run purge",
+        "purge": "filament-purge -i resources/dist/beverly.css -o resources/dist/beverly.css -v 3.x",
+        "build": "vite build",
+        "dev": "vite"
+    },
+    "devDependencies": {
+        "@awcodes/filament-plugin-purge": "^1.0.1",
+        "autoprefixer": "^10.4.20",
+        "laravel-vite-plugin": "^1.0.5",
+        "postcss": "^8.4.45",
+        "postcss-nesting": "^13.0.0",
+        "tailwindcss": "^3.4.10",
+        "vite": "^5.4.2"
+    },
+    "dependencies": {
+        "fuse.js": "^6.5.3",
+        "postcss-import": "^16.1.0"
+    }
+}
