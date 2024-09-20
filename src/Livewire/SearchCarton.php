@@ -45,14 +45,7 @@ class SearchCarton extends Component
             'selectedCartonNumber' => null
         ];
     }
-    public function successNotification(): void
-    {
-        $this->notification()->send([
-            'icon' => 'success',
-            'title' => 'Success Notification!',
-            'description' => 'This is a description.',
-        ]);
-    }
+
 
     public function check(){
         $value = $this->form->all();
