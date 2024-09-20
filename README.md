@@ -1,4 +1,4 @@
-# FUSE
+# BEVERLY
 ![Beverly](./assets/teresa_beverly_banner.png)
 
 This is accuracy system module for Teresa.
