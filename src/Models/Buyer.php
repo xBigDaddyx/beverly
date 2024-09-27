@@ -16,7 +16,7 @@ use Wildside\Userstamps\Userstamps;
 
 class Buyer extends Model
 {
-    use HasFactory,SoftDeletes,Userstamps;
+    use HasFactory, SoftDeletes, Userstamps;
     protected $fillable = [
         'logo',
         'name',
@@ -28,9 +28,11 @@ class Buyer extends Model
         'company_id'
     ];
 
-    public static function boot(){
+    public static function boot()
+    {
         parent::boot();
-        static::creating(function ($model){
+        Model::shouldBeStrict();
+        static::creating(function ($model) {
             $model->company_id = Auth::user()->company_id;
         });
     }

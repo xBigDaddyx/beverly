@@ -13,7 +13,7 @@ use Wildside\Userstamps\Userstamps;
 //class PackingList extends Model implements Auditable
 class PackingList extends Model
 {
-    use HasFactory,SoftDeletes,Userstamps;
+    use HasFactory, SoftDeletes, Userstamps;
 
     protected $guarded = [];
 
@@ -23,6 +23,7 @@ class PackingList extends Model
     public static function boot()
     {
         parent::boot();
+        Model::shouldBeStrict();
         self::creating(function ($model) {
 
             $model->company_id = auth()->user()->company->id;

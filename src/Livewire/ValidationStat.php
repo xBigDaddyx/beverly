@@ -18,9 +18,9 @@ class ValidationStat extends Component
 
     public function render()
     {
-        if (session()->get('carton.type') === 'RATIO' || session()->get('carton.type') === 'MIX') {
-            return view('beverly::livewire.carton-box.validation-stat', ['count' => $this->polybags->count(), 'tags_count' => $this->tags->count()]);
+        if ($this->carton->type === 'RATIO' || $this->carton->type === 'MIX') {
+            return view('beverly::livewire.carton-box.validation-stat', ['count' => $this->carton->solidPolybags->count(), 'tags_count' => $this->tags->count()]);
         }
-        return view('beverly::livewire.carton-box.validation-stat', ['count' => $this->polybags->count()]);
+        return view('beverly::livewire.carton-box.validation-stat', ['count' => $this->carton->solidPolybags->count()]);
     }
 }

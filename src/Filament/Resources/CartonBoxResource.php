@@ -56,7 +56,7 @@ class CartonBoxResource extends Resource
                         ->schema([
 
                             Infolists\Components\TextEntry::make('box_code')
-                            ->inlineLabel()
+                                ->inlineLabel()
                                 ->color('secondary')
                                 ->copyable()
                                 ->copyMessage('Copied!')
@@ -66,7 +66,7 @@ class CartonBoxResource extends Resource
                                 ->iconColor('primary')
                                 ->icon('tabler-barcode'),
                             Infolists\Components\TextEntry::make('packingList.po')
-                            ->inlineLabel()
+                                ->inlineLabel()
                                 ->color('secondary')
                                 ->copyable()
                                 ->copyMessage('Copied!')
@@ -77,7 +77,7 @@ class CartonBoxResource extends Resource
                                 ->icon('tabler-file-invoice')
                                 ->label('PO'),
                             Infolists\Components\TextEntry::make('type')
-                            ->inlineLabel()
+                                ->inlineLabel()
                                 ->icon('tabler-badge')
                                 ->badge()
                                 ->color(fn(string $state): string => match ($state) {
@@ -86,23 +86,23 @@ class CartonBoxResource extends Resource
                                     'RATIO' => 'success',
                                 }),
                             Infolists\Components\TextEntry::make('carton_number')
-                            ->inlineLabel()
+                                ->inlineLabel()
                                 ->iconColor('primary')
                                 ->icon('tabler-number'),
                             Infolists\Components\TextEntry::make('quantity')
-                            ->inlineLabel()
+                                ->inlineLabel()
                                 ->iconColor('primary')
                                 ->icon('tabler-number')
                                 ->numeric(),
                             Infolists\Components\IconEntry::make('is_completed')
-                            ->tooltip(fn(Model $record): string => $record->completed_at . ' ( ' . $record->completedBy->name . ' )')
-                            ->inlineLabel()
+                                ->tooltip(fn(Model $record): string => $record->completed_at . ' ( ' . $record->completedBy->name . ' )')
+                                ->inlineLabel()
                                 ->label('Completed')
                                 ->boolean()
                                 ->trueColor('secondary')
                                 ->falseColor('danger'),
                             Infolists\Components\TextEntry::make('description')
-                            ->inlineLabel()
+                                ->inlineLabel()
                                 ->iconColor('primary')
                                 ->icon('tabler-pencil')
                                 ->formatStateUsing(fn(string $state): HtmlString => new HtmlString($state))
@@ -166,18 +166,18 @@ class CartonBoxResource extends Resource
                             ->label('Type'),
                         Forms\Components\Select::make('packing_list_id')
                             ->hiddenOn(CartonBoxesRelationManager::class)
-                            ->relationship('packingList', 'po', modifyQueryUsing: fn(Builder $query) => $query->whereBelongsTo(Filament::getTenant()))
+                            ->relationship('packingList', 'po', modifyQueryUsing: fn(Builder $query) => $query->whereBelongsTo(Filament::getTenant())->with('buyer'))
                             ->required()
                             ->getOptionLabelFromRecordUsing(fn(Model $record) => "PO: {$record->po} - {$record->buyer->name} {$record->buyer->country} - {$record->style_no}"),
                         Forms\Components\TextInput::make('carton_number')
                             ->default(0)
                             ->label('Carton Number'),
-                        Forms\Components\TextInput::make('size')
-                            ->hidden(fn(Get $get): bool => $get('type') === 'RATIO')
-                            ->label('Size'),
-                        Forms\Components\TextInput::make('color')
-                            ->hidden(fn(Get $get): bool => $get('type') === 'RATIO')
-                            ->label('Color'),
+                        // Forms\Components\TextInput::make('size')
+                        //     ->hidden(fn(Get $get): bool => $get('type') === 'RATIO')
+                        //     ->label('Size'),
+                        // Forms\Components\TextInput::make('color')
+                        //     ->hidden(fn(Get $get): bool => $get('type') === 'RATIO')
+                        //     ->label('Color'),
                         Forms\Components\TextInput::make('quantity')
                             ->required()
                             ->label('Quantity'),
@@ -203,26 +203,26 @@ class CartonBoxResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-        ->headerActionsPosition(HeaderActionsPosition::Bottom)
+            ->headerActionsPosition(HeaderActionsPosition::Bottom)
             ->columns([
 
                 Tables\Columns\TextColumn::make('index')
-                ->label('No')
-                ->state(
-                    static function (Tables\Contracts\HasTable $livewire, stdClass $rowLoop): string {
-                        return (string) (
-                            $rowLoop->iteration +
-                            ($livewire->getTableRecordsPerPage() * (
-                                $livewire->getTablePage() - 1
-                            ))
-                        );
-                    }
-                ),
+                    ->label('No')
+                    ->state(
+                        static function (Tables\Contracts\HasTable $livewire, stdClass $rowLoop): string {
+                            return (string) (
+                                $rowLoop->iteration +
+                                ($livewire->getTableRecordsPerPage() * (
+                                    $livewire->getTablePage() - 1
+                                ))
+                            );
+                        }
+                    ),
                 Tables\Columns\TextColumn::make('box_code')
-                ->copyable()
-    ->copyMessage('Barcode or Box Code copied!')
-    ->copyMessageDuration(1500)
-                ->color('secondary')
+                    ->copyable()
+                    ->copyMessage('Barcode or Box Code copied!')
+                    ->copyMessageDuration(1500)
+                    ->color('secondary')
                     ->icon('tabler-barcode')
                     ->iconColor('secondary')
                     ->weight(\Filament\Support\Enums\FontWeight::Bold)
@@ -230,37 +230,37 @@ class CartonBoxResource extends Resource
                     ->label('Box Code'),
 
                 Tables\Columns\TextColumn::make('packingList.po')
-                ->copyable()
-                ->copyMessage('PO copied!')
-                ->copyMessageDuration(1500)
-                ->color('secondary')
-                ->description(fn (Model $record):string => 'Style : '.$record->packingList->style_no.' / MO : '.$record->packingList->contract_no)
-                ->icon('tabler-file-invoice')
+                    ->copyable()
+                    ->copyMessage('PO copied!')
+                    ->copyMessageDuration(1500)
+                    ->color('secondary')
+                    ->description(fn(Model $record): string => 'Style : ' . $record->packingList->style_no . ' / MO : ' . $record->packingList->contract_no)
+                    ->icon('tabler-file-invoice')
                     ->iconColor('secondary')
                     ->weight(\Filament\Support\Enums\FontWeight::Bold)
                     ->label('PO'),
-                    Tables\Columns\TextColumn::make('packingList.buyer.name')
+                Tables\Columns\TextColumn::make('packingList.buyer.name')
                     ->icon('tabler-basket')
-                        ->iconColor('warning')
-                        ->label('Buyer'),
+                    ->iconColor('warning')
+                    ->label('Buyer'),
                 Tables\Columns\TextColumn::make('carton_number')
-                ->iconColor('primary')
-                ->icon('tabler-number')
+                    ->iconColor('primary')
+                    ->icon('tabler-number')
                     ->tooltip('Carton Number')
                     ->label('CN'),
                 Tables\Columns\TextColumn::make('quantity')
-                ->iconColor('primary')
-                ->icon('tabler-number')
+                    ->iconColor('primary')
+                    ->icon('tabler-number')
                     // ->summarize(Sum::make()->label('Total'))
                     ->label('Quantity'),
                 Tables\Columns\TextColumn::make('type')
-                ->icon('tabler-badge')
-                                ->badge()
-                                ->color(fn(string $state): string => match ($state) {
-                                    'SOLID' => 'danger',
-                                    'MIX' => 'warning',
-                                    'RATIO' => 'success',
-                                })
+                    ->icon('tabler-badge')
+                    ->badge()
+                    ->color(fn(string $state): string => match ($state) {
+                        'SOLID' => 'danger',
+                        'MIX' => 'warning',
+                        'RATIO' => 'success',
+                    })
                     ->searchable()
                     ->label('Type'),
                 // Tables\Columns\TextColumn::make('description')
@@ -275,7 +275,7 @@ class CartonBoxResource extends Resource
                     ->falseIcon('tabler-clipboard-x')
                     ->label('Completed'),
                 Tables\Columns\TextColumn::make('created_at')
-                ->toggleable(isToggledHiddenByDefault: true)
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->label('Created')
                     ->dateTime(),
                 Tables\Columns\TextColumn::make('createdBy.name')
@@ -402,91 +402,91 @@ class CartonBoxResource extends Resource
             ->filtersFormWidth('4xl')
             ->actions([
                 \Rmsramos\Activitylog\Actions\ActivityLogTimelineTableAction::make('Activities')
-                ->visible(fn ():bool => auth()->user()->can('view_carton_box_activities'))
-                ->timelineIcons([
-                    'created' => 'heroicon-m-check-badge',
-                    'updated' => 'heroicon-m-pencil-square',
-                ])
-                ->timelineIconColors([
-                    'created' => 'info',
-                    'updated' => 'warning',
-                ])
-                ->withRelations(['packingList']),
+                    // ->visible(fn(): bool => auth()->user()->can('view_carton_box_activities'))
+                    ->timelineIcons([
+                        'created' => 'heroicon-m-check-badge',
+                        'updated' => 'heroicon-m-pencil-square',
+                    ])
+                    ->timelineIconColors([
+                        'created' => 'info',
+                        'updated' => 'warning',
+                    ])
+                    ->withRelations(['packingList']),
 
-                    // Tables\Actions\Action::make('finish_inspection')
-                    //     ->visible(fn (CartonBox $record): bool => $record->in_inspection === true)
-                    //     ->action(fn (CartonBox $record) => $record->finishInspection())
-                    //     ->icon('heroicon-o-clipboard-document-check')
-                    //     ->requiresConfirmation()
-                    //     ->modalHeading('Finish inspection')
-                    //     ->modalDescription('Are you sure you\'d like to finish inspect this carton box?')
-                    //     ->modalIcon('heroicon-o-clipboard-document-check')
-                    //     ->modalIconColor('warning')
-                    //     ->modalSubmitActionLabel('Yes, finish it.')
-                    //     ->color('warning'),
-                    // Tables\Actions\Action::make('inspection')
-                    //     ->form([
-                    //         Forms\Components\TextInput::make('inspection_requested_by')
-                    //             ->label('Inspection Requester')
-                    //             ->required(),
-                    //     ])
-                    //     ->visible(fn (CartonBox $record): bool => $record->is_completed === true)
-                    //     ->action(fn (array $data, CartonBox $record) => $record->inspection($data['inspection_requested_by']))
-                    //     ->icon('heroicon-o-document-magnifying-glass')
-                    //     ->requiresConfirmation()
-                    //     ->modalHeading('Inspect Carton Box')
-                    //     ->modalDescription('Are you sure you\'d like to inspect this carton box?')
-                    //     ->modalIcon('heroicon-o-document-magnifying-glass')
-                    //     ->modalIconColor('warning')
-                    //     ->modalSubmitActionLabel('Yes, inspect it.')
-                    //     ->color('warning'),
-                    // Tables\Actions\Action::make('lock')
-                    //     ->action(fn (CartonBox $record) => $record->lock())
-                    //     ->icon('tabler-lock')
-                    //     ->requiresConfirmation()
-                    //     ->visible(fn (CartonBox $record): bool => $record->isUnlocked() && $record->is_completed === true && auth()->user()->can('carton_box_lock', $record))
-                    //     ->modalHeading('Lock Carton Box')
-                    //     ->modalDescription('Are you sure you\'d like to lock this carton box?')
-                    //     ->modalIcon('tabler-lock')
-                    //     ->modalIconColor('danger')
-                    //     ->modalSubmitActionLabel('Yes, lock it.')
-                    //     ->color('danger'),
-                    // Tables\Actions\Action::make('unlock')
-                    //     ->action(fn (Model $record) => $record->unlock())
-                    //     ->icon('tabler-lock-open')
-                    //     ->visible(fn (Model $record): bool => $record->isLocked() && auth()->user()->can('carton_box_unlock', $record))
-                    //     ->requiresConfirmation()
-                    //     ->modalHeading('Unlock Carton Box')
-                    //     ->modalDescription('Are you sure you\'d like to unlock this carton box?')
-                    //     ->modalIcon('tabler-lock-open')
-                    //     ->modalIconColor('success')
-                    //     ->modalSubmitActionLabel('Yes, Unlock it.')
-                    //     ->color('success'),
-                    Tables\Actions\ViewAction::make()
-                    ->visible(fn ():bool => auth()->user()->can('viewAny_carton_box'))
+                // Tables\Actions\Action::make('finish_inspection')
+                //     ->visible(fn (CartonBox $record): bool => $record->in_inspection === true)
+                //     ->action(fn (CartonBox $record) => $record->finishInspection())
+                //     ->icon('heroicon-o-clipboard-document-check')
+                //     ->requiresConfirmation()
+                //     ->modalHeading('Finish inspection')
+                //     ->modalDescription('Are you sure you\'d like to finish inspect this carton box?')
+                //     ->modalIcon('heroicon-o-clipboard-document-check')
+                //     ->modalIconColor('warning')
+                //     ->modalSubmitActionLabel('Yes, finish it.')
+                //     ->color('warning'),
+                // Tables\Actions\Action::make('inspection')
+                //     ->form([
+                //         Forms\Components\TextInput::make('inspection_requested_by')
+                //             ->label('Inspection Requester')
+                //             ->required(),
+                //     ])
+                //     ->visible(fn (CartonBox $record): bool => $record->is_completed === true)
+                //     ->action(fn (array $data, CartonBox $record) => $record->inspection($data['inspection_requested_by']))
+                //     ->icon('heroicon-o-document-magnifying-glass')
+                //     ->requiresConfirmation()
+                //     ->modalHeading('Inspect Carton Box')
+                //     ->modalDescription('Are you sure you\'d like to inspect this carton box?')
+                //     ->modalIcon('heroicon-o-document-magnifying-glass')
+                //     ->modalIconColor('warning')
+                //     ->modalSubmitActionLabel('Yes, inspect it.')
+                //     ->color('warning'),
+                // Tables\Actions\Action::make('lock')
+                //     ->action(fn (CartonBox $record) => $record->lock())
+                //     ->icon('tabler-lock')
+                //     ->requiresConfirmation()
+                //     ->visible(fn (CartonBox $record): bool => $record->isUnlocked() && $record->is_completed === true && auth()->user()->can('carton_box_lock', $record))
+                //     ->modalHeading('Lock Carton Box')
+                //     ->modalDescription('Are you sure you\'d like to lock this carton box?')
+                //     ->modalIcon('tabler-lock')
+                //     ->modalIconColor('danger')
+                //     ->modalSubmitActionLabel('Yes, lock it.')
+                //     ->color('danger'),
+                // Tables\Actions\Action::make('unlock')
+                //     ->action(fn (Model $record) => $record->unlock())
+                //     ->icon('tabler-lock-open')
+                //     ->visible(fn (Model $record): bool => $record->isLocked() && auth()->user()->can('carton_box_unlock', $record))
+                //     ->requiresConfirmation()
+                //     ->modalHeading('Unlock Carton Box')
+                //     ->modalDescription('Are you sure you\'d like to unlock this carton box?')
+                //     ->modalIcon('tabler-lock-open')
+                //     ->modalIconColor('success')
+                //     ->modalSubmitActionLabel('Yes, Unlock it.')
+                //     ->color('success'),
+                Tables\Actions\ViewAction::make()
+                    ->visible(fn(): bool => auth()->user()->can('viewAny_carton_box'))
                     ->color('secondary'),
-                    Tables\Actions\EditAction::make()
-                    ->visible(fn ():bool => auth()->user()->can('update_carton_box'))
+                Tables\Actions\EditAction::make()
+                    ->visible(fn(CartonBox $record): bool => auth()->user()->can('update_carton_box') && $record->locked_at === null)
                     ->color('warning'),
-                    // ->visible(fn (CartonBox $record): bool => $record->isUnlocked() && $record->in_inspection === false),
-                    Tables\Actions\DeleteAction::make()
-                        ->visible(fn(): bool => auth()->user()->can('delete_carton_box')),
-                    // Tables\Actions\Action::make('view_activities')
-                    //     ->visible(fn (): bool => auth('ldap')->user()->hasRole('super-admin'))
-                    //     ->label('Activities')
-                    //     ->icon('heroicon-m-bolt')
-                    //     ->color('info')
-                    //     ->url(fn ($record) => CartonBoxResource::getUrl('activities', ['record' => $record])),
+                // ->visible(fn (CartonBox $record): bool => $record->isUnlocked() && $record->in_inspection === false),
+                Tables\Actions\DeleteAction::make()
+                    ->visible(fn(CartonBox $record): bool => auth()->user()->can('delete_carton_box') && $record->locked_at === null),
+                // Tables\Actions\Action::make('view_activities')
+                //     ->visible(fn (): bool => auth('ldap')->user()->hasRole('super-admin'))
+                //     ->label('Activities')
+                //     ->icon('heroicon-m-bolt')
+                //     ->color('info')
+                //     ->url(fn ($record) => CartonBoxResource::getUrl('activities', ['record' => $record])),
 
 
             ])
             ->headerActions([
                 FilamentExportHeaderAction::make('export')
-                ->visible(fn(): bool => auth()->user()->can('export_carton_box')),
+                    ->visible(fn(): bool => auth()->user()->can('export_carton_box')),
             ])
             ->bulkActions([
                 FilamentExportBulkAction::make('Export')
-                ->visible(fn(): bool => auth()->user()->can('export_carton_box')),
+                    ->visible(fn(): bool => auth()->user()->can('export_carton_box')),
                 // Tables\Actions\BulkAction::make('finish_inspection')
                 //     // ->visible(fn (Collection $records): bool => $records->contains('in_inspection', true))
                 //     ->action(fn (Collection $records) => $records->each->finishInspection())
@@ -527,9 +527,13 @@ class CartonBoxResource extends Resource
     public static function getRelations(): array
     {
         return [
+            // RelationGroup::make('Polybags', [
+            \Xbigdaddyx\BeverlySolid\Filament\Pages\SolidPolybagsRelationManager::class,
+            // ]),
             CartonBoxResource\RelationsManager\CartonBoxAttributesRelationManager::class,
-            CartonBoxResource\RelationsManager\PolybagsRelationManager::class,
-            CartonBoxResource\RelationsManager\TagsRelationManager::class,
+            // CartonBoxResource\RelationsManager\PolybagsRelationManager::class,
+            // CartonBoxResource\RelationsManager\TagsRelationManager::class,
+
         ];
     }
     public static function getPages(): array

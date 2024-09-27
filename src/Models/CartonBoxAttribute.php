@@ -7,23 +7,20 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
+use Xbigdaddyx\BeverlyRatio\Traits\HasRatioTag;
 
 class CartonBoxAttribute extends Model
 {
 
-    use SoftDeletes;
+    use SoftDeletes, HasRatioTag;
 
     protected $guarded = [];
 
-    // public static function boot()
-    // {
-    //     parent::boot();
-    //     self::creating(function ($model) {
-
-    //         $model->company_id = auth()->user()->company->id;
-    //     });
-    // }
+    public static function boot()
+    {
+        parent::boot();
+        Model::shouldBeStrict();
+    }
     public function carton(): BelongsTo
     {
         return $this->belongsTo(CartonBox::class, 'carton_box_id', 'id');

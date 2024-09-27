@@ -1,5 +1,5 @@
 <div
-    class="card overflow-x-auto bg-white rounded-xl shadow-md p-4 max-h-[30rem] text-secondary-700 dark:text-white dark:bg-secondary-800">
+    class="card overflow-x-auto bg-white rounded-xl shadow-md p-4 max-h-[30rem] text-secondary-700 dark:text-white dark:bg-secondary-800 col-span-2">
     <div class="overflow-x-auto">
         <h2 class="card-title">Attributes</h2>
         <p>Below attributes need to be validated each polybags</p>

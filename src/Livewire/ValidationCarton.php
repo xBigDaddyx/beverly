@@ -5,6 +5,7 @@ namespace Xbigdaddyx\Beverly\Livewire;
 use App\Livewire\Forms\ValidateForm;
 
 use Illuminate\Contracts\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
@@ -17,6 +18,10 @@ use Xbigdaddyx\Beverly\Livewire\Forms\ValidationBoxForm;
 use Xbigdaddyx\Beverly\Models\CartonBox;
 use Xbigdaddyx\Beverly\Models\Polybag;
 use Xbigdaddyx\Beverly\Models\Tag;
+use Xbigdaddyx\BeverlyRatio\Facades\BeverlyRatio;
+use Xbigdaddyx\BeverlySolid\Facades\BeverlySolid;
+use Filament\Notifications\Notification;
+
 
 class ValidationCarton extends Component
 {
@@ -25,6 +30,7 @@ class ValidationCarton extends Component
     public $carton;
     public $type;
     public $polybags;
+    public $polybag;
     public $tags;
     public bool $showTable = false;
     public bool $completed = false;
@@ -143,25 +149,48 @@ class ValidationCarton extends Component
     public function validation()
     {
         $value = $this->form->all();
-        if ($this->carton->type === 'SOLID') {
-            $validate = BeverlyVerification::verification($this->carton, $value['polybag_barcode'], 0, null, auth()->user(), $value['additional']);
-        } elseif ($this->carton->type === 'RATIO' || $this->carton->type === 'MIX') {
+        switch ($this->carton->type) {
+            case 'SOLID':
 
-            if (session()->get('polybag.status') === 1) {
-                $validate = BeverlyVerification::verification($this->carton, $value['polybag_barcode'], 1, $value['tag_barcode'], auth()->user());
-                if ($this->carton->type === 'MIX') {
-                    if ($validate === 'updated' && $this->carton->polybags->count() !== $this->carton->quantity) {
-                        $this->form->reset();
-                        session()->put('polybag.status', 0);
-                    }
-                    return redirect(route('filament.beverly.validation.polybag.release', ['carton' => $this->carton->id]));
+                $validate = BeverlySolid::verification($this->carton, $value['polybag_barcode'], 0, null, auth()->user(), $value['additional']);
+                if (is_array($validate)) {
+                    $this->dispatch('swal', $validate);
                 }
                 $this->form->reset();
-                return redirect(route('filament.beverly.validation.polybag.release', ['carton' => $this->carton->id]));
-            }
-
-            $validate = BeverlyVerification::verification($this->carton, $value['polybag_barcode'], 0, $value['tag_barcode'], auth()->user());
+                break;
+            case 'RATIO':
+                // jika parameter polybag kosong maka akan dibuatkan record polybagnya
+                if ($this->polybag || empty($this->polybag)) {
+                    $this->polybag = BeverlyRatio::createRatioPolybag($this->carton, $value['additional'], Auth::user(), $value['polybag_barcode']);
+                }
+                // merubah status polybag ke open
+                $status_change = BeverlyRatio::updateStatusRatioPolybag($this->polybag, 'open');
+                if ($status_change || $this->polybag->status === 'open') {
+                    // melakukan verifikasi garment
+                }
+                break;
+            case 'MIX':
+                break;
+            default:
         }
+        // if ($this->carton->type === 'SOLID') {
+        //     $validate = BeverlySolid::verification($this->carton, $value['polybag_barcode'], 0, null, auth()->user(), $value['additional']);
+        // } elseif ($this->carton->type === 'RATIO' || $this->carton->type === 'MIX') {
+        //     if (session()->get('polybag.status') === 1) {
+        //         $validate = BeverlyRatio::verification($this->carton, $value['polybag_barcode'], 1, $value['tag_barcode'], auth()->user());
+        //         if ($this->carton->type === 'MIX') {
+        //             if ($validate === 'updated' && $this->carton->polybags->count() !== $this->carton->quantity) {
+        //                 $this->form->reset();
+        //                 session()->put('polybag.status', 0);
+        //             }
+        //             return redirect(route('filament.beverly.validation.polybag.release', ['carton' => $this->carton->id]));
+        //         }
+        //         $this->form->reset();
+        //         return redirect(route('filament.beverly.validation.polybag.release', ['carton' => $this->carton->id]));
+        //     }
+
+        //     $validate = BeverlyRatio::verification($this->carton, $value['polybag_barcode'], 0, $value['tag_barcode'], auth()->user());
+        // }
 
 
 
@@ -171,9 +200,9 @@ class ValidationCarton extends Component
             $this->polybags = CartonBox::find($this->carton->id)->polybags;
             $this->dispatch('swal', [
                 'toast' => true,
-                'position'=> 'top-end',
+                'position' => 'top-end',
                 'showConfirmButton' => false,
-                'timer'=> 6000,
+                'timer' => 6000,
                 'timerProgressBar' => true,
                 'title' => 'Polybag Validated!',
                 'text' => 'Go for next!',
@@ -261,16 +290,15 @@ class ValidationCarton extends Component
             $this->form->reset();
             $this->dispatch('swal', [
                 'toast' => true,
-                'position'=> 'top-end',
+                'position' => 'top-end',
                 'showConfirmButton' => false,
-                'timer'=> 6000,
+                'timer' => 6000,
                 'timerProgressBar' => true,
                 'title' => 'Garment Validated!',
                 'text' => 'Go for next!',
                 'icon' => 'warning',
 
             ]);
-
         }
     }
 }

@@ -12,10 +12,11 @@ use Illuminate\Support\Facades\Auth;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
 use Wildside\Userstamps\Userstamps;
+use Xbigdaddyx\BeverlySolid\Traits\HasSolidPolybag;
 
 class CartonBox extends Model
 {
-    use HasFactory,SoftDeletes,Userstamps,LogsActivity;
+    use HasFactory, SoftDeletes, Userstamps, LogsActivity, HasSolidPolybag;
 
     protected $fillable = [
         'box_code',
@@ -33,21 +34,33 @@ class CartonBox extends Model
         'company_id'
     ];
 
-
+    public function scopeLocked($query)
+    {
+        return $query->whereNotNull('locked_at');
+    }
+    public function scopeUnlocked($query)
+    {
+        return $query->whereNull('locked_at');
+    }
     protected $casts = [
         'is_completed' => 'boolean',
     ];
-    public static function boot(){
+    public static function boot()
+    {
         parent::boot();
-        static::creating(function ($model){
+        Model::shouldBeStrict();
+        static::creating(function ($model) {
             $model->company_id = Auth::user()->company_id;
         });
     }
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
-            ->logOnly(['box_code','packingList', 'is_completed', 'carton_number', 'quantity', 'locked_at'])
-            ->logOnlyDirty();
+            ->logOnly(['box_code', 'packingList', 'is_completed', 'carton_number', 'quantity', 'locked_at', 'solidPolybags'])
+            ->logOnlyDirty()
+            ->setDescriptionForEvent(fn(string $eventName) => "This carton box has been {$eventName}")
+            ->useLogName('carton-boxes')
+            ->dontSubmitEmptyLogs();
     }
     public function polybags(): HasMany
     {

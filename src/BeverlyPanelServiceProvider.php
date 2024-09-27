@@ -68,8 +68,10 @@ class BeverlyPanelServiceProvider extends PanelProvider
 
             ])
             ->plugins([
+                \Rmsramos\Activitylog\ActivitylogPlugin::make()
+                ->navigationItem(false),
                 \CharrafiMed\GlobalSearchModal\GlobalSearchModalPlugin::make()
-                ->highlighter(false),
+                    ->highlighter(false),
                 \ChrisReedIO\Socialment\SocialmentPlugin::make()
                     ->registerProvider('azure', 'fab-microsoft', 'Sign in with Microsoft'),
                 \Xbigdaddyx\Beverly\BeverlyPlugin::make(),
@@ -126,7 +128,7 @@ class BeverlyPanelServiceProvider extends PanelProvider
             ])
 
             ->tenantMiddleware([
-          //
+                //
             ], isPersistent: true)
             //->tenantRoutePrefix('company')
             ->tenant(\Xbigdaddyx\Fuse\Domain\Company\Models\Company::class, 'short_name', 'company')

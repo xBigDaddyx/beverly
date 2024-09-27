@@ -4,6 +4,7 @@ import forms from '@tailwindcss/forms';
 import typography from '@tailwindcss/typography';
 const colors = require('tailwindcss/colors')
 
+
 export default {
     presets: [
         require("./vendor/wireui/wireui/tailwind.config.js"),
@@ -55,15 +56,15 @@ export default {
                     950: '#1B3F17'
                 },
                 secondary: {
-                    50: '#69E0E0',
-                    100: '#59DCDC',
-                    200: '#37D5D5',
-                    300: '#27BCBC',
-                    400: '#209A9A',
-                    500: '#197878',
-                    600: '#125656',
-                    700: '#0B3535',
-                    800: '#041313',
+                    50: '#98AAD2',
+                    100: '#8A9FCC',
+                    200: '#6D87BF',
+                    300: '#5170B3',
+                    400: '#435E99',
+                    500: '#364C7C',
+                    600: '#2A3B60',
+                    700: '#1D2943',
+                    800: '#111827',
                     900: '#000000',
                     950: '#000000'
                 },
@@ -88,6 +89,6 @@ export default {
         },
     },
 
-    plugins: [require('daisyui'), typography],
+    plugins: [require('daisyui'), typography, require('tailwindcss-animated')],
     darkMode: ['class'],
 }

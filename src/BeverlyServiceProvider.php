@@ -27,6 +27,9 @@ use Xbigdaddyx\Beverly\Livewire\ValidationAttribute;
 use Xbigdaddyx\Beverly\Livewire\ValidationCarton;
 use Xbigdaddyx\Beverly\Livewire\ValidationStat;
 use Xbigdaddyx\Beverly\Testing\TestsBeverly;
+use Filament\Notifications\Livewire\Notifications;
+use Filament\Support\Enums\Alignment;
+use Filament\Support\Enums\VerticalAlignment;
 
 
 class BeverlyServiceProvider extends PackageServiceProvider
@@ -86,8 +89,10 @@ class BeverlyServiceProvider extends PackageServiceProvider
 
     public function packageBooted(): void
     {
-        \Illuminate\Support\Facades\Blade::componentNamespace('Xbigdaddyx\\Beverly\\Components','beverly');
-        $this->publishes([__DIR__.'/../public/vendor/xbigdaddyx/beverly'=>public_path('vendor/xbigdaddyx/beverly')],'beverly-assets');
+        Notifications::alignment(Alignment::Center);
+        Notifications::verticalAlignment(VerticalAlignment::Center);
+        \Illuminate\Support\Facades\Blade::componentNamespace('Xbigdaddyx\\Beverly\\Components', 'beverly');
+        $this->publishes([__DIR__ . '/../public/vendor/xbigdaddyx/beverly' => public_path('vendor/xbigdaddyx/beverly')], 'beverly-assets');
         if (class_exists(Livewire::class)) {
             Livewire::component('carton-box-summary-chart', CartonBoxSummaryChart::class);
             Livewire::component('carton-dashboard', CartonDashboard::class);
@@ -137,7 +142,7 @@ class BeverlyServiceProvider extends PackageServiceProvider
     {
         return [
             // AlpineComponent::make('beverly', __DIR__ . '/../resources/dist/components/beverly.js'),
-            Css::make('/../public/vendor/xbigdaddyx/beverly','vendor/xbigdaddyx/beverly'),
+            Css::make('/../public/vendor/xbigdaddyx/beverly', 'vendor/xbigdaddyx/beverly'),
             // Js::make('beverly-scripts', __DIR__ . '/../resources/dist/beverly.js'),
         ];
     }

@@ -14,13 +14,15 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     @wireUiScripts
     @filamentStyles
+
     {{ Vite::useBuildDirectory('vendor/xbigdaddyx/beverly')->withEntryPoints(['resources/css/beverly.css', 'resources/js/beverly.js']) }}
     {{-- @vite('resources/css/app.css', '') --}}
     {{-- @vite(['resources/css/app.css', 'resources/js/app.js']) --}}
 </head>
 
 <body class="font-sans antialiased ">
-    @filamentScripts
+
+
     <div class="flex flex-col min-h-screen bg-base-main dark:bg-base-background md:pl-64">
         <header class="flex items-center h-20 md:h-auto" x-data="{ open: false }">
             <nav class="relative flex items-center w-full px-4">
@@ -47,7 +49,8 @@
         <!-- Page Content -->
         <main class="h-screen flex-1 bg-cover bg-center items-center justify-center p-8"
             style="background-image: url('https://teresa.test/storage/images/bg-01.png');">
-
+            @livewire('notifications')
+            @filamentScripts
             {{ $slot }}
 
 

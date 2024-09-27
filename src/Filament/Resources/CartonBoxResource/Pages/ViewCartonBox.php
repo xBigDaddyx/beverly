@@ -9,6 +9,7 @@ use Xbigdaddyx\Beverly\Filament\Resources\CartonBoxResource;
 class ViewCartonBox extends ViewRecord
 {
     protected static string $resource = CartonBoxResource::class;
+
     // public function hasCombinedRelationManagerTabsWithContent(): bool
     // {
     //     return true;
