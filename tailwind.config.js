@@ -9,7 +9,6 @@ export default {
     presets: [
         require("./vendor/wireui/wireui/tailwind.config.js"),
 
-
     ],
     content: [
         './app/Filament/**/*.php',

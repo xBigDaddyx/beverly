@@ -66,8 +66,8 @@
                                <div class="badge badge-secondary">Principle</div>
                            </h2>
                            @if ($carton->type === 'MIX' || $carton->type === 'RATIO')
-                               <p>After finish validating garment tag, close by scanning polybag barcode or carton
-                                   box barcode.</p>
+                               <p>Validating each garment inside polybags. Make sure each polybag match with ratio
+                                   attribute garment.</p>
                            @else
                                <p>Validating each polybags inside the carton box. Make sure each polybag have same
                                    attribute

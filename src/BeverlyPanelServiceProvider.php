@@ -39,9 +39,8 @@ class BeverlyPanelServiceProvider extends PanelProvider
             // ->profile(Domain\User\Filament\Pages\Auth\Profile::class)
             ->unsavedChangesAlerts()
             ->passwordReset()
-            // ->viteTheme('resources/css/filament/beverly/theme.css')
             ->topNavigation()
-            // ->spa()
+            ->spa()
             ->maxContentWidth(MaxWidth::Full)
             ->login()
             ->globalSearchKeyBindings(['command+k', 'ctrl+k'])
@@ -69,11 +68,11 @@ class BeverlyPanelServiceProvider extends PanelProvider
             ])
             ->plugins([
                 \Rmsramos\Activitylog\ActivitylogPlugin::make()
-                ->navigationItem(false),
+                    ->navigationItem(false),
                 \CharrafiMed\GlobalSearchModal\GlobalSearchModalPlugin::make()
                     ->highlighter(false),
                 \ChrisReedIO\Socialment\SocialmentPlugin::make()
-                    ->registerProvider('azure', 'fab-microsoft', 'Sign in with Microsoft'),
+                    ->registerProvider('azure', 'microsoft', 'Sign in with Microsoft'),
                 \Xbigdaddyx\Beverly\BeverlyPlugin::make(),
                 \Leandrocfe\FilamentApexCharts\FilamentApexChartsPlugin::make(),
                 \Joaopaulolndev\FilamentEditProfile\FilamentEditProfilePlugin::make()
