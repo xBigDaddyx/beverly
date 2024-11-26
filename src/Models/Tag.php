@@ -13,11 +13,7 @@ class Tag extends Model
     use SoftDeletes, HasUuids;
     protected $primaryKey = 'uuid';
     protected $guarded = [];
-    public static function boot()
-    {
-        parent::boot();
-        Model::shouldBeStrict();
-    }
+
     public function taggable()
     {
         return $this->morphTo();

@@ -187,7 +187,12 @@ class BeverlyServiceProvider extends PackageServiceProvider
     protected function getMigrations(): array
     {
         return [
-            // 'create_beverly_table',
+            '2024_09_09_113032_create_buyers_table',
+            '2024_09_09_113033_create_packing_lists_table',
+            '2024_09_09_113034_create_carton_boxes_table',
+            '2024_09_09_151710_create_carton_box_attributes_table',
+            '2024_09_09_151710_create_carton_box_attributes_table',
+            '2024_09_23_102410_create_tags_table'
         ];
     }
 }

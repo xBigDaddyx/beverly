@@ -16,11 +16,6 @@ class CartonBoxAttribute extends Model
 
     protected $guarded = [];
 
-    public static function boot()
-    {
-        parent::boot();
-        Model::shouldBeStrict();
-    }
     public function carton(): BelongsTo
     {
         return $this->belongsTo(CartonBox::class, 'carton_box_id', 'id');

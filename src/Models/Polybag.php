@@ -18,7 +18,6 @@ class Polybag extends Model
     public static function boot()
     {
         parent::boot();
-        Model::shouldBeStrict();
     }
 
     protected $guarded = [];

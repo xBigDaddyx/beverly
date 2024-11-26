@@ -19,7 +19,6 @@ class PackingListAttribute extends Model
     public static function boot()
     {
         parent::boot();
-        Model::shouldBeStrict();
         self::creating(function ($model) {
 
             $model->company_id = auth()->user()->company->id;
