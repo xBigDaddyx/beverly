@@ -36,11 +36,7 @@
         "ryangjchandler/blade-tabler-icons": "^2.3",
         "spatie/laravel-package-tools": "^1.15.0",
         "wildside/userstamps": "*",
-        "wireui/wireui": "*",
-        "xbigdaddyx/beverly-mix": "dev-main",
-        "xbigdaddyx/beverly-ratio": "dev-main",
-        "xbigdaddyx/beverly-solid": "dev-main",
-        "xbigdaddyx/fuse": "dev-master"
+        "wireui/wireui": "*"
     },
     "require-dev": {
         "laravel/pint": "^1.0",
@@ -92,35 +88,5 @@
         }
     },
     "minimum-stability": "dev",
-    "prefer-stable": true,
-    "repositories": {
-        "xbigdaddyx/beverly-mix": {
-            "type": "path",
-            "url": "/home/xbigdaddyx/projects/teresa/packages/xbigdaddyx/beverly-mix",
-            "options": {
-                "symlink": true
-            }
-        },
-        "xbigdaddyx/beverly-ratio": {
-            "type": "path",
-            "url": "/home/xbigdaddyx/projects/teresa/packages/xbigdaddyx/beverly-ratio",
-            "options": {
-                "symlink": true
-            }
-        },
-        "xbigdaddyx/beverly-solid": {
-            "type": "path",
-            "url": "/home/xbigdaddyx/projects/teresa/packages/xbigdaddyx/beverly-solid",
-            "options": {
-                "symlink": true
-            }
-        },
-        "xbigdaddyx/fuse": {
-            "type": "path",
-            "url": "/home/xbigdaddyx/projects/teresa/packages/xbigdaddyx/fuse",
-            "options": {
-                "symlink": true
-            }
-        }
-    }
+    "prefer-stable": true
 }
